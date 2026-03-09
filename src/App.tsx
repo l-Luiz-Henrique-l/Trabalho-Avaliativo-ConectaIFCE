@@ -1,5 +1,6 @@
 import Navbar from "./components/shared/navbar"
 import Footer from "./components/shared/footer"
+import Homepage from "./pages/homepage"
 function App() {
 
   return (
@@ -7,7 +8,7 @@ function App() {
 		<div className="flex flex-col min-h-svh">
 				<Navbar />
 				<main className="flex-1">
-					Conteudo Principal
+					<Homepage />
 				</main>
 
 				<Footer />
