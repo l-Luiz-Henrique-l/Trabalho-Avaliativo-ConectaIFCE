@@ -1,0 +1,36 @@
+import React from 'react'
+import { Button } from '../ui/button'
+import { ArrowRight, Ghost } from 'lucide-react'
+
+function CtaSection() {
+	return (
+		<section className='bg-background py-20'>
+			<div className='container-main'>
+				<div className='mx-auto text-center max-w-2xl'>
+				<h2 className='text-4xl font-bold text-balance text-foreground tracking-tight'>
+				Pronto para se conectar
+				</h2>
+				<p className='mt-4 text-balance text-lg text-muted-foreground'>
+					Junte-se a milhares de membros da comunidade IFCE. Compartilhe suas ideias, encontre
+					colaboradores e faça parte de algo maior.
+				</p>
+				</div>
+			</div>
+
+			<div className='mt-16 flex items-center justify-center gap-4'>
+				<Button size='lg' asChild>
+				<a href="/register" className='flex gap-2 items-center w-60 h-12'>
+				<span className='uppercase tracking-wider'>Participar Agora</span>
+					<ArrowRight className='size-4 '/></a>
+				</Button>
+
+				<Button variant="ghost" size="lg" asChild>
+					<a href="/login" className='w-40 h-12'>Já tem conta?</a>
+				</Button>
+
+			</div>
+		</section>
+	)
+}
+
+export default CtaSection
