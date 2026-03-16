@@ -1,6 +1,7 @@
 import { ArrowRight, Sparkles } from 'lucide-react'
 import React from 'react'
 import { Button } from '../ui/button'
+import { Link } from 'react-router-dom'
 
 function Herosection() {
 	return (
@@ -14,7 +15,7 @@ function Herosection() {
 				</div>
 
 				<h1 className='mt-6 text-6xl text-balance font-bold text-foreground tracking-tight'>
-					Conecte-se, colabore e {' '}<span className='text-primary'> cresça junto</span>
+					Conecte-se, colabore e {' '} <span className='text-primary'> cresça junto</span>
 					com a comunidade IFCE
 				</h1>
 
@@ -24,9 +25,9 @@ function Herosection() {
 				</p>
 
 				<Button className='mt-10' size='lg' asChild>
-				<a href="/register" className='flex gap-2 items-center w-60 h-12'>
+				<Link to="/register" className='flex gap-2 items-center w-60 h-12'>
 				<span className='uppercase tracking-wider'>Participar Agora</span>
-					<ArrowRight className='size-4 '/></a>
+					<ArrowRight className='size-4 '/></Link>
 				</Button>
 
 				<div className='mt-16 flex items-center gap-8 text-sm text-muted-foreground'>

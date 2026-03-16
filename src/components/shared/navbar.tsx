@@ -1,25 +1,26 @@
+import { Link } from 'react-router-dom'
 import { Button } from '../ui/button'
 import Brand from './brand'
 function Navbar() {
 	return(
 		<header className="sticky top-0 border-b border-border z-50 bg-card/80 backdrop-blur-md">
 			<nav className="container-main flex items-center justify-between py-3">
-				<a href="/">
+				<Link to="/">
 					<Brand/>
-				</a>
+				</Link>
 
 				<div className="flex gap-4 lg:gap-8">
-					<a href="/" className='text-muted-foreground font-medium hover:text-primary'>Inicio</a>
-					<a href="/#feature-section" className='text-muted-foreground font-medium hover:text-primary'>Recursos</a>
-					<a href="/#faq-section" className='text-muted-foreground font-medium hover:text-primary'>Perguntas Frequentes</a>
+					<Link to="/" className='text-muted-foreground font-medium hover:text-primary'>Inicio</Link>
+					<Link to="/#feature-section" className='text-muted-foreground font-medium hover:text-primary'>Recursos</Link>
+					<Link to="/#faq-section" className='text-muted-foreground font-medium hover:text-primary'>Perguntas Frequentes</Link>
 				</div>
 
 				<div className="flex gap-2">
 					<Button variant='ghost' size='lg' asChild>
-						<a href="/login">Login</a>
+						<Link to="/login">Login</Link>
 					</Button>
 					<Button size='lg' asChild>
-						<a href="/register">Criar Conta</a>
+						<Link to="/register">Criar Conta</Link>
 					</Button>
 				</div>
 

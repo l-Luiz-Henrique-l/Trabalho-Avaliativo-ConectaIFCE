@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from '../ui/button'
 import { ArrowRight, Ghost } from 'lucide-react'
+import { Link, Links } from 'react-router-dom'
 
 function CtaSection() {
 	return (
@@ -19,13 +20,13 @@ function CtaSection() {
 
 			<div className='mt-16 flex items-center justify-center gap-4'>
 				<Button size='lg' asChild>
-				<a href="/register" className='flex gap-2 items-center w-60 h-12'>
+				<Link to="/register" className='flex gap-2 items-center w-60 h-12'>
 				<span className='uppercase tracking-wider'>Participar Agora</span>
-					<ArrowRight className='size-4 '/></a>
+					<ArrowRight className='size-4 '/></Link>
 				</Button>
 
 				<Button variant="ghost" size="lg" asChild>
-					<a href="/login" className='w-40 h-12'>Já tem conta?</a>
+					<Link to="/login" className='w-40 h-12'>Já tem conta?</Link>
 				</Button>
 
 			</div>
