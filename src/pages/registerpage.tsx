@@ -6,34 +6,24 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { registerSchema } from '@/schemas/register.schema'
+import { registerSchema, type RegisterFormData } from '@/schemas/register.schema'
 import { ZodError } from 'zod'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 function Registerpage() {
 
-	const handleSubmit = (event: React.SubmitEvent) => {
-		event.preventDefault
-		const formData = new FormData(event.target)
+		const {register, handleSubmit, reset, control,
+			formState: {errors, isSubmitted, isValid}}= useForm<RegisterFormData>({
+			resolver: zodResolver(registerSchema),
+			mode: 'onBlur'
+		})
 
-		const data ={
-			firstName: formData.get('firstName'),
-			lastName: formData.get('lastName'),
-			email: formData.get('email'),
-			role: formData.get('role'),
-			campus: formData.get('campus'),
-			password: formData.get('password'),
-
-		}
-
-		try {
-		const validateData = registerSchema.parse(data)
-		console.log(validateData)
-		} catch (error) {
-			if(error instanceof ZodError){
-				console.log(error)
-			}
-		}
-
+	const onSubmit = async (data: RegisterFormData) => {
+		console.log('Enviando...', data)
+		await new Promise(resolve => setTimeout(resolve, 2000))
+		console.log('Usuario Cadastrado')
+		reset()
 	}
 	const [showPass, setShowPass] = useState<boolean>(false)
 
@@ -55,22 +45,36 @@ function Registerpage() {
 				</CardHeader>
 
 				<CardContent>
-					<form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+					<form className='flex flex-col gap-4' onSubmit={handleSubmit(onSubmit)}>
 					<div className='flex items-center gap-4'>
 					<div className='flex flex-col gap-2'>
 							<Label htmlFor='firstName' className='text-foreground'>
 								Nome
 							</Label>
-							<Input id='firstName' name='firstName' type='text' placeholder='Seu nome' required
-							className='h-11 bg-background'/>
+							<Input id='firstName' type='text' placeholder='Seu nome' required
+							className='h-11 bg-background'
+							{...register('firstName')}
+							/>
+							{errors.firstName && (
+								<p className='text-xs text-destructive'>
+									{errors.firstName.message}
+								</p>
+							)}
 						</div>
 
 						<div className='flex flex-col gap-2'>
 							<Label htmlFor='lastName' className='text-foreground'>
 								Sobrenome
 							</Label>
-							<Input id='lastName' name='lastName' type='text' placeholder='Seu sobrenome' required
-							className='h-11 bg-background'/>
+							<Input id='lastName' type='text' placeholder='Seu sobrenome' required
+							className='h-11 bg-background'
+							{...register('lastName')}
+							/>
+							{errors.lastName && (
+								<p className='text-xs text-destructive'>
+									{errors.lastName.message}
+								</p>
+							)}
 						</div>
 						</div>
 
@@ -78,8 +82,16 @@ function Registerpage() {
 							<Label htmlFor='email' className='text-foreground'>
 								Email Institucional
 							</Label>
-							<Input id='email' name='email' type='email' placeholder='seu.nome@ifce.edu.br' required
-							className='h-11 bg-background'/>
+							<Input id='email' type='email' placeholder='seu.nome@ifce.edu.br' required
+							className='h-11 bg-background'
+							{...register('email')}
+							/>
+							{errors.email && (
+								<p className='text-xs text-destructive'>
+									{errors.email.message}
+								</p>
+							)}
+
 						</div>
 
 						<div className='flex flex-col gap-2'>
@@ -87,7 +99,8 @@ function Registerpage() {
 								Vinculo
 							</Label>
 
-							<Select required >
+							<Controller name='role' control={control} render= {({field})=>(
+								<Select required onValueChange={field.onChange} value={field.value ?? ""}>
 								<SelectTrigger className='bg-background w-full h-11' id='role'>
 									<SelectValue placeholder="Selecione seu vinculo com o IFCE" />
 								</SelectTrigger>
@@ -97,6 +110,13 @@ function Registerpage() {
 									<SelectItem value='technician'>Técnico</SelectItem>
 								</SelectContent>
 							</Select>
+							)} />
+
+							{errors.role && (
+								<p className='text-xs text-destructive'>
+									{errors.role.message}
+								</p>
+							)}
 						</div>
 
 					<div className='flex flex-col gap-2'>
@@ -104,7 +124,8 @@ function Registerpage() {
 								Campus
 							</Label>
 
-							<Select required>
+							<Controller name='campus' control={control} render={({field})=> (
+								<Select required onValueChange={field.onChange} value={field.value ?? ""}>
 								<SelectTrigger className='bg-background w-full h-11' id='campus'>
 									<SelectValue placeholder="Selecione seu Campus" />
 								</SelectTrigger>
@@ -114,13 +135,23 @@ function Registerpage() {
 									<SelectItem value='fortaleza'>Fortaleza</SelectItem>
 								</SelectContent>
 							</Select>
+							)}/>
+
+								{errors.campus && (
+								<p className='text-xs text-destructive'>
+									{errors.campus.message}
+								</p>
+							)}
+
 						</div>
 
 						<div className='flex flex-col gap-2'>
 							<Label htmlFor='password' className='text-foreground'>Senha</Label>
 							<div className='relative'>
-							<Input id='password' name='password' type={showPass ? "text" : "password"} required
-							className='h-11 bg-background' placeholder='Digite sua senha'/>
+							<Input id='password' type={showPass ? "text" : "password"} required
+							className='h-11 bg-background' placeholder='Digite sua senha'
+							{...register('password')}
+							/>
 
 							<button className='absolute right-3 top-1/2 -translate-y-1/2
 							text-muted-foreground houver:text-primary' type='button'
@@ -129,6 +160,13 @@ function Registerpage() {
 								{showPass ? <EyeOffIcon className='size-4'/> : <EyeIcon className='size-4'/>}
 							</button>
 							</div>
+
+								{errors.password && (
+								<p className='text-xs text-destructive'>
+									{errors.password.message}
+								</p>
+							)}
+
 							<p className='text-xs text-foreground'>
 								Mínimo de 8 caracteres com letras e números
 							</p>
