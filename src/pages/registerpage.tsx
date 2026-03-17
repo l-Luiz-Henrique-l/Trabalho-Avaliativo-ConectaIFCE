@@ -6,9 +6,35 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { registerSchema } from '@/schemas/register.schema'
+import { ZodError } from 'zod'
 
 function Registerpage() {
 
+	const handleSubmit = (event: React.SubmitEvent) => {
+		event.preventDefault
+		const formData = new FormData(event.target)
+
+		const data ={
+			firstName: formData.get('firstName'),
+			lastName: formData.get('lastName'),
+			email: formData.get('email'),
+			role: formData.get('role'),
+			campus: formData.get('campus'),
+			password: formData.get('password'),
+
+		}
+
+		try {
+		const validateData = registerSchema.parse(data)
+		console.log(validateData)
+		} catch (error) {
+			if(error instanceof ZodError){
+				console.log(error)
+			}
+		}
+
+	}
 	const [showPass, setShowPass] = useState<boolean>(false)
 
 	return (
@@ -29,21 +55,21 @@ function Registerpage() {
 				</CardHeader>
 
 				<CardContent>
-					<form className='flex flex-col gap-4'>
+					<form className='flex flex-col gap-4' onSubmit={handleSubmit}>
 					<div className='flex items-center gap-4'>
 					<div className='flex flex-col gap-2'>
-							<Label htmlFor='name' className='text-foreground'>
+							<Label htmlFor='firstName' className='text-foreground'>
 								Nome
 							</Label>
-							<Input id='name' name='name' type='text' placeholder='Seu nome' required
+							<Input id='firstName' name='firstName' type='text' placeholder='Seu nome' required
 							className='h-11 bg-background'/>
 						</div>
 
 						<div className='flex flex-col gap-2'>
-							<Label htmlFor='sobrenome' className='text-foreground'>
+							<Label htmlFor='lastName' className='text-foreground'>
 								Sobrenome
 							</Label>
-							<Input id='sobrenome' name='sobrenome' type='text' placeholder='Seu sobrenome' required
+							<Input id='lastName' name='lastName' type='text' placeholder='Seu sobrenome' required
 							className='h-11 bg-background'/>
 						</div>
 						</div>
