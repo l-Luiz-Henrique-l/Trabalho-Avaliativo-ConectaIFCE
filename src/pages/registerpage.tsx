@@ -1,29 +1,59 @@
 import Brand from '@/components/shared/brand'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { EyeIcon, EyeOffIcon, Loader2Icon } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { registerSchema, type RegisterFormData } from '@/schemas/register.schema'
-import { ZodError } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate } from 'react-router-dom'
 
 function Registerpage() {
 
+	const [campuses, setCampuses] = useState<Array<{
+		id: string,
+		name: string
+	}>>([])
+
+	const navigate = useNavigate()
+
+	useEffect(() => {
+		async function fetchCampuses(){
+			const response = await fetch('https://conectaifce-api.proflucasmendes.com.br/campuses')
+			if(response.ok){
+				const data = await response.json()
+				setCampuses(data)
+			}
+		}
+		fetchCampuses()
+	}, [])
+
 		const {register, handleSubmit, reset, control,
-			formState: {errors, isSubmitted, isValid}}= useForm<RegisterFormData>({
+			formState: {errors, isSubmitting, isValid}, watch}= useForm<RegisterFormData>({
 			resolver: zodResolver(registerSchema),
 			mode: 'onBlur'
 		})
 
 	const onSubmit = async (data: RegisterFormData) => {
-		console.log('Enviando...', data)
-		await new Promise(resolve => setTimeout(resolve, 2000))
-		console.log('Usuario Cadastrado')
-		reset()
+		const { course, ...rest} = data
+		const payload = data.role === 'student' ? data : rest
+
+		const response = await fetch ('https://conectaifce-api.proflucasmendes.com.br/auth/register', {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify(payload)
+		})
+
+		if(response.ok){
+			const responseData = await response.json()
+			console.log(data)
+			localStorage.setItem('acess_token', responseData.token)
+			navigate("/feed")
+		}
+
 	}
 	const [showPass, setShowPass] = useState<boolean>(false)
 
@@ -78,6 +108,21 @@ function Registerpage() {
 						</div>
 						</div>
 
+							<div className='flex flex-col gap-2'>
+							<Label htmlFor='handle' className='text-foreground'>
+								Nome de Usuário
+							</Label>
+							<Input id='handle' type='text' placeholder='Seu nome de Usuário' required
+							className='h-11 bg-background'
+							{...register('handle')}
+							/>
+							{errors.handle && (
+								<p className='text-xs text-destructive'>
+									{errors.handle.message}
+								</p>
+							)}
+						</div>
+
 						<div className='flex flex-col gap-2'>
 							<Label htmlFor='email' className='text-foreground'>
 								Email Institucional
@@ -125,16 +170,16 @@ function Registerpage() {
 							</Label>
 
 							<Controller name='campus' control={control} render={({field})=> (
-								<Select required onValueChange={field.onChange} value={field.value ?? ""}>
+								<Select onValueChange={field.onChange} value={field.value ?? ""}>
 								<SelectTrigger className='bg-background w-full h-11' id='campus'>
 									<SelectValue placeholder="Selecione seu Campus" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value='taua'>Tauá</SelectItem>
-									<SelectItem value='boa-viagem'>Boa Viagem</SelectItem>
-									<SelectItem value='fortaleza'>Fortaleza</SelectItem>
-								</SelectContent>
-							</Select>
+									{ campuses && campuses.map(campus => (
+										<SelectItem value= {campus.id} key={campus.id}> {campus.name} </SelectItem>
+									))}
+									</SelectContent>
+								</Select>
 							)}/>
 
 								{errors.campus && (
@@ -144,6 +189,26 @@ function Registerpage() {
 							)}
 
 						</div>
+
+							{watch('role') === 'student' && (
+							<div className='flex flex-col gap-2'>
+							<Label htmlFor='course' className='text-foreground'>
+								Curso
+							</Label>
+							<Input id='course' type='text' placeholder='Seu nome do seu curso' required
+							className='h-11 bg-background'
+							{...register('course')}
+							/>
+							{errors.course && (
+								<p className='text-xs text-destructive'>
+									{errors.course.message}
+								</p>
+							)}
+						</div>
+							)}
+
+
+
 
 						<div className='flex flex-col gap-2'>
 							<Label htmlFor='password' className='text-foreground'>Senha</Label>
@@ -172,15 +237,21 @@ function Registerpage() {
 							</p>
 						</div>
 
-						<Button type="submit" className='mt-2 h-11'>
-							Entrar
+						<Button type="submit" className='mt-2 h-11' disabled={isSubmitting || !isValid}>
+							{
+								isSubmitting ? (
+									<span className='flex items-center gap-4'>
+											<Loader2Icon className='size-4 animate-spin'/>
+									</span>
+								) : "Criar Conta"
+							}
 						</Button>
 					</form>
 				</CardContent>
 
 				<CardFooter className='border-t border-border'>
 					<p className='text-sm text-muted-foreground text-center w-full '>Já tem conta?
-						<a href="/login" className='text-primary'>Criar Conta</a></p>
+						<a href="/login" className='text-primary'>Entrar</a></p>
 				</CardFooter>
 			</Card>
 		</section>
