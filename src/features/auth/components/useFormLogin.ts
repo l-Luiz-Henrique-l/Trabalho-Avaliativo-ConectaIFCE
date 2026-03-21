@@ -1,15 +1,15 @@
-import { http } from "@/infra/http/http-client"
 import { loginSchema, type LoginFormData } from "@/schemas/login.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { setAcessToken } from "../storage/auth-storage"
 import { ApiError } from "@/infra/http/api-error"
+import { loginUser } from "../services/login.service"
 
 export function useFormLogin() {
+    const [loginError, setLoginError] = useState<string | null>(null)
+    const [showPass, setShowPass] = useState<boolean>(false)
     const navigate = useNavigate()
-    const [showPass, setShowPass] = useState(false)
 
     const { register, handleSubmit, formState: { errors, isSubmitting, isValid } } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -17,25 +17,32 @@ export function useFormLogin() {
     })
 
     const onSubmit = async (data: LoginFormData) => {
+        setLoginError(null)
         try {
-            const responseData = await http.post<{ token: string }>('auth/login', data)
-            setAcessToken(responseData.token)
+            await loginUser(data)
             navigate("/feed")
         } catch (error) {
-            if (error instanceof ApiError){
-							setAuthError(error.message)
-						}
-						console.log(error)
+            if (error instanceof ApiError) {
+                setLoginError(error.message)
+            } else {
+                setLoginError("Ocorreu um erro inesperado ao realizar o login.")
+            }
         }
     }
 
     return {
-        state: { showPass, setShowPass },
+        state: {
+            showPass,
+            setShowPass,
+            loginError
+        },
         onSubmit,
-        useForm: { register, handleSubmit, errors, isSubmitting, isValid }
+        useForm: {
+            register,
+            handleSubmit,
+            isSubmitting,
+            errors,
+            isValid
+        }
     }
 }
-function setAuthError(message: string) {
-	throw new Error("Function not implemented.")
-}
-

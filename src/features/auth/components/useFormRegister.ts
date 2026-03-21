@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import type { tr } from "zod/locales"
 import { setAcessToken } from "../storage/auth-storage"
+import { ApiError } from "@/infra/http/api-error"
+import { getCampuses, registerUser } from "../services/register.service"
 
 export function useFormRegister() {
 	const [campuses, setCampuses] = useState<Array<{
@@ -13,15 +15,20 @@ export function useFormRegister() {
 		name: string
 	}>>([])
 
+	const [registerError, setRegisterError] = useState<string | null>(null)
+
 	const navigate = useNavigate()
 
 	useEffect(() => {
 		async function fetchCampuses(){
 			try {
-			const campuses = await http.get<Array<{ id: string, name: string }>>('campuses')
-			setCampuses(campuses)
+				const  campuses = await getCampuses()
+				setCampuses(campuses)
 			} catch (error) {
-				console.error(error)
+				if (error instanceof ApiError){
+				setRegisterError(error.message)
+										}
+
 			}
 
 		}
@@ -39,8 +46,8 @@ export function useFormRegister() {
 		const payload = data.role === 'student' ? data : rest
 
 		try {
-			const responseData = await http.post<{token: string, user: any}>('auth/register', payload)
-			setAcessToken(responseData.token)
+
+			registerUser(payload)
 			navigate("/feed")
 		} catch (error) {
 			console.log(error)
@@ -53,6 +60,7 @@ export function useFormRegister() {
 		state: {
 			showPass,
 			setShowPass,
+			registerError,
 			campuses
 		},
 		onSubmit,
