@@ -1,11 +1,12 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './avatar'
 
-function AvatarUser() {
+function AvatarUser({imageUrl, initials, size}: {imageUrl: string | undefined, initials: string,
+	size: "default" | "sm" | "lg" | undefined}) {
 	return (
-		<Avatar>
-  <AvatarImage src="https://github.com/shadcn.png" />
-  <AvatarFallback>CN</AvatarFallback>
+		<Avatar size={size}>
+  <AvatarImage src={imageUrl} />
+  <AvatarFallback className='bg-primary/20 text-primary border border-primary/50 font-semibold'>{initials}</AvatarFallback>
 </Avatar>
 	)
 }

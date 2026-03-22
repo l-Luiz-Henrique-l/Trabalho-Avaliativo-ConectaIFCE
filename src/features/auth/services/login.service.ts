@@ -1,7 +1,7 @@
 import { http } from "@/infra/http/http-client"
 import type { LoginFormData } from "@/schemas/login.schema"
 import type { AuthUser } from "../components/storages/userAuth.storage"
-import { setAcessToken } from "../components/storages/token-storage"
+import { clearAcessToken, setAcessToken } from "../components/storages/token-storage"
 
 type LoginResponseDTO = {
     token: string
@@ -13,4 +13,8 @@ export async function loginUser(credentials: LoginFormData): Promise<LoginRespon
     setAcessToken(responseData.token)
 
     return responseData
+}
+
+export function logout(): void {
+	clearAcessToken()
 }
