@@ -5,11 +5,13 @@ import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { ApiError } from "@/infra/http/api-error"
 import { loginUser } from "../services/login.service"
+import { useAuth } from "../contexts/AuthContext"
 
 export function useFormLogin() {
     const [loginError, setLoginError] = useState<string | null>(null)
     const [showPass, setShowPass] = useState<boolean>(false)
     const navigate = useNavigate()
+		const {setAuthUser} = useAuth()
 
     const { register, handleSubmit, formState: { errors, isSubmitting, isValid } } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -19,7 +21,8 @@ export function useFormLogin() {
     const onSubmit = async (data: LoginFormData) => {
         setLoginError(null)
         try {
-            await loginUser(data)
+            const responseData = await loginUser(data)
+						setAuthUser(responseData.user)
             navigate("/feed")
         } catch (error) {
             if (error instanceof ApiError) {

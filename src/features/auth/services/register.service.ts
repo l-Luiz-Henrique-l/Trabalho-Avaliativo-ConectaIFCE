@@ -1,7 +1,7 @@
 import { http } from "@/infra/http/http-client"
-import { setAcessToken } from "../storage/auth-storage"
-import type { AuthUser } from "../storages/userAuth.storage"
+import type { AuthUser } from "../components/storages/userAuth.storage"
 import type { RegisterFormData } from "@/schemas/register.schema";
+import { setAcessToken } from "../components/storages/token-storage";
 
 
 type CampusType = {

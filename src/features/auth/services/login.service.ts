@@ -1,20 +1,14 @@
 import { http } from "@/infra/http/http-client"
-import { setAcessToken } from "../storage/auth-storage"
 import type { LoginFormData } from "@/schemas/login.schema"
-
-type LoginRequestDTO = LoginFormData
+import type { AuthUser } from "../components/storages/userAuth.storage"
+import { setAcessToken } from "../components/storages/token-storage"
 
 type LoginResponseDTO = {
     token: string
-    user: {
-        email: string
-        password: string
-    }
+    user: AuthUser
 }
-
-export async function loginUser(credentials: LoginRequestDTO): Promise<LoginResponseDTO> {
+export async function loginUser(credentials: LoginFormData): Promise<LoginResponseDTO> {
     const responseData = await http.post<LoginResponseDTO>('auth/login', credentials)
-
 
     setAcessToken(responseData.token)
 

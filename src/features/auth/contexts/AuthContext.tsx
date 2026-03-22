@@ -1,5 +1,5 @@
 import { Children, createContext, useContext, useState, type ReactNode } from "react";
-import { clearStoreUser, getStoreUser, setStoreUser, type AuthUser } from "../storages/userAuth.storage";
+import { clearStoreUser, getStoreUser, setStoreUser, type AuthUser } from "../components/storages/userAuth.storage";
 
 type AuthContextType = {
 	isAuthenticad: boolean,

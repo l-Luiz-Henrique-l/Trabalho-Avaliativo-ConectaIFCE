@@ -1,11 +1,11 @@
 import { http } from "@/infra/http/http-client"
 import { registerSchema, type RegisterFormData } from "@/schemas/register.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import type { tr } from "zod/locales"
-import { setAcessToken } from "../storage/auth-storage"
+import { useAuth } from "../contexts/AuthContext"
 import { ApiError } from "@/infra/http/api-error"
 import { getCampuses, registerUser } from "../services/register.service"
 
@@ -14,7 +14,7 @@ export function useFormRegister() {
 		id: string,
 		name: string
 	}>>([])
-
+	const {setAuthUser} = useAuth()
 	const [registerError, setRegisterError] = useState<string | null>(null)
 
 	const navigate = useNavigate()
@@ -47,7 +47,8 @@ export function useFormRegister() {
 
 		try {
 
-			registerUser(payload)
+			const responseData = await registerUser(payload)
+			setAuthUser(responseData.user)
 			navigate("/feed")
 		} catch (error) {
 			console.log(error)

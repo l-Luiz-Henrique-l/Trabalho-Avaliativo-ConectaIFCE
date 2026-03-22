@@ -15,6 +15,15 @@ export type AuthUser = {
 }
 
 const KEY_AUTH_USER = 'auth_user'
+const KEY_TOKEN = 'access_token'
+
+export function setAccessToken(token: string) {
+    localStorage.setItem(KEY_TOKEN, token)
+}
+
+export function getAccessToken() {
+    return localStorage.getItem(KEY_TOKEN)
+}
 
 function setStoreUser(user: AuthUser){
 	localStorage.setItem(KEY_AUTH_USER, JSON.stringify(user))
