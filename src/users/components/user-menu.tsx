@@ -1,18 +1,18 @@
 
 import React from 'react'
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../../components/ui/dropdown-menu'
 import AvatarUser from './avatar-user'
 import { useUserMenu } from './useUserMenu'
 
 function UserMenu() {
 
-		const {	authUser, getInicials, triggerLogout } = 	useUserMenu()
-		const initials= getInicials()
+		const {	authUser, triggerLogout } = useUserMenu()
 	return (
 		<DropdownMenu>
   <DropdownMenuTrigger className='outline-none'>
-			<AvatarUser imageUrl={authUser?.avatarUrl} initials={initials} size='lg'/>
+			<AvatarUser avatarUrl={authUser?.avatarUrl} firstName={authUser?.firstName}
+			lastName={authUser?.lastName} size='lg'/>
   </DropdownMenuTrigger>
   <DropdownMenuContent>
     <DropdownMenuGroup>
