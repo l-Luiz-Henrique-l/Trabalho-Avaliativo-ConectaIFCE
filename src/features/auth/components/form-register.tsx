@@ -111,7 +111,7 @@ function FormRegister() {
 								<SelectTrigger className='bg-background w-full h-11' id='campus'>
 									<SelectValue placeholder="Selecione seu Campus" />
 								</SelectTrigger>
-								<SelectContent>
+								<SelectContent position='popper'>
 									{ state.campuses && state.campuses.map(campus => (
 										<SelectItem value= {campus.id} key={campus.id}> {campus.name} </SelectItem>
 									))}
@@ -143,9 +143,6 @@ function FormRegister() {
 							)}
 						</div>
 							)}
-
-
-
 
 						<div className='flex flex-col gap-2'>
 							<Label htmlFor='password' className='text-foreground'>Senha</Label>

@@ -1,6 +1,4 @@
-import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar'
-import type { UserDomain } from '../types/UserDomain'
 import { useAvatar } from './useAvatar'
 
 function AvatarUser({avatarUrl, firstName, lastName, size}: {

@@ -12,7 +12,7 @@ export type UserDomain = {
     name: string;
   };
   course?: string;
-	states: {
+		states: {
 		followerCount: number,
 		followingCount: number
 		postsCount: number,

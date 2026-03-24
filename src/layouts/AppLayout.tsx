@@ -1,7 +1,6 @@
 import Navbar from '@/components/shared/navbar'
-import UserMenu from '@/users/components/user-menu'
 import { useAuth } from '@/features/auth/contexts/AuthContext'
-import React from 'react'
+import UserMenu from '@/users/components/user-menu'
 import { Navigate, Outlet } from 'react-router-dom'
 
 function AppLayout() {
@@ -22,12 +21,14 @@ function AppLayout() {
 					<Navbar.Links>
 						<Navbar.Link to='/feed' text='Feed'/>
 						<Navbar.Link to='/groups' text='Grupos'/>
+
 					</Navbar.Links>
 
 					<Navbar.Actions>
 						<UserMenu />
 					</Navbar.Actions>
 				</Navbar>
+				<Outlet />
     </>
 	)
 }
