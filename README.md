@@ -79,7 +79,7 @@ Exemplo:
 * `useFormLogin`
 * `useFormRegister`
 
-👉 Benefícios:
+ Benefícios:
 
 * Código mais limpo
 * Separação entre UI e lógica
