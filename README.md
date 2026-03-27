@@ -1,73 +1,182 @@
-# React + TypeScript + Vite
+# ConectaIFCE - Plataforma Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação frontend desenvolvida com foco em prática de desenvolvimento moderno utilizando React, integração com API REST e boas práticas de organização e arquitetura.
 
-Currently, two official plugins are available:
+O projeto foi construído com base nas videoaulas do curso, feitas pelo professor Lucas Mendes.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Tecnologias Utilizadas
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* React + Vite
+* TypeScript
+* TailwindCSS
+* shadcn/ui
+* React Hook Form
+* Zod (validação)
+* React Router DOM
+* ESLint + Prettier
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Funcionalidades
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+A aplicação contempla as seguintes funcionalidades:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Autenticação
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* Login
+* Registro de usuário
+* Armazenamento de usuário autenticado em contexto global
+* Tratamento de erros da API
+* Controle de loading
+
+### Proteção de Rotas
+
+* Rotas privadas acessíveis apenas para usuários autenticados
+* Redirecionamento automático para login
+
+---
+
+### Feed
+
+* Listagem de usuários recomendados.
+---
+
+### Perfil
+
+* Visualização de perfil de usuário
+* Informações dinâmicas
+
+---
+
+### Decisão
+
+Foi adotado o padrão **feature-based** para facilitar:
+
+* Escalabilidade
+* Organização
+* Reutilização de código
+
+---
+
+## Principais Decisões Técnicas
+
+### Uso do React Hook Form + Zod
+
+Diferente do projeto original:
+
+* Foi implementada validação com **Zod**
+* Melhor controle de erros
+* Tipagem forte com TypeScript
+
+---
+
+### Separação de lógica com Hooks
+
+Exemplo:
+
+* `useFormLogin`
+* `useFormRegister`
+
+👉 Benefícios:
+
+* Código mais limpo
+* Separação entre UI e lógica
+* Reutilização
+
+---
+
+### Camada de Serviço (Services)
+
+As chamadas da API foram isoladas em arquivos próprios:
+
+```
+services/login.service.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+=> Evita lógica de API dentro dos componentes
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Contexto de Autenticação
+
+Foi implementado um contexto global:
+
 ```
+AuthContext
+```
+---
+
+### Cliente HTTP Centralizado
+
+Criação de um `http-client` com:
+
+* tratamento de erros
+* uso de token automático
+* padronização de requisições
+
+---
+
+### Proteção de Rotas
+
+Implementação de rotas privadas:
+
+* Verifica se usuário está autenticado
+* Redireciona automaticamente
+
+---
+
+### Estados de Loading
+
+* Botões com loading (`isSubmitting`)
+* Feedback visual para o usuário
+
+---
+
+### Tratamento de Erros
+
+* Exibição de erros vindos da API
+* Mensagens amigáveis ao usuário
+
+---
+
+## Layout e UI
+
+* Uso de **shadcn/ui** para componentes reutilizáveis
+* Estilização com **TailwindCSS**
+* Layout base reutilizável
+
+---
+
+## Acessibilidade
+
+Foram aplicadas melhorias como:
+
+* Uso correto de `label` com `htmlFor`
+* Inputs acessíveis
+* Feedback visual de erro
+* Navegação consistente
+
+---
+
+## Como Rodar o Projeto
+
+```bash
+# instalar dependências
+npm install
+
+# rodar o projeto
+npm run dev
+```
+
+---
+
+## Considerações Finais
+
+O projeto evolui significativamente em relação com o passar das videoaulas, trazendo melhorias estruturais, melhor organização de código e maior aderência a boas práticas modernas de desenvolvimento frontend.
+
+---
+
+## Créditos
+Canal do Professor: https://www.youtube.com/@prof_lucasmendes
